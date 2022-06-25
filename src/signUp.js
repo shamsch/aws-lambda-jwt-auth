@@ -54,7 +54,7 @@ const signUp = async (event) => {
     }
     // valid password so hash it and save it to dynamodb
     else {
-        const saltRounds = 10;
+        const saltRounds = process.env.SALT? process.env.SALT: 10;
         const passwordHash = await bcrypt.hash(password, saltRounds);
         const id = v4();
         const params = {
