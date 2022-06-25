@@ -7,3 +7,6 @@ jspm_packages
 
 # vc code 
 .vscode
+
+#config
+config.json
