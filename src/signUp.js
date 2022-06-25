@@ -44,7 +44,7 @@ const signUp = async (event) => {
         };
     }
     //check if email is valid
-    if(!email.includes('@') && !email.includes('.')){
+    if(!email.includes('@') || !email.includes('.')){
         return {
             statusCode: 400,
             body: JSON.stringify({
