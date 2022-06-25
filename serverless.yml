@@ -6,33 +6,45 @@ provider:
     name: aws
     runtime: nodejs14.x
     region: eu-north-1
+    iamRoleStatements:
+        - Effect: Allow
+          Action:
+          - dynamodb:*
+          Resource:
+          - ${file(./config.json):ARN}
 
 functions:
-    hello:
-        handler: handler.hello
+    signup:
+        handler: src/signUp.handler
         events:
             - http:
-                  path: /
+                  path: /signup
+                  method: post
+    allusers:
+        handler: src/allUsers.handler
+        events:
+            - http:
+                  path: /allusers
                   method: get
+    signin:
+        handler: src/signIn.handler
+        events:
+            - http:
+                  path: /signin
+                  method: post
 
 resources:
     Resources:
-        UserTable:
+        JwtUsersTable:
             Type: AWS::DynamoDB::Table
             Properties:
-                TableName: UserTable
+                TableName: JwtUsersTable
                 BillingMode: PAY_PER_REQUEST
                 AttributeDefinitions:
                     - AttributeName: id
                       AttributeType: S
-                    # - AttributeName: email
-                    #   AttributeType: S
-                    # - AttributeName: first-name
-                    #   AttributeType: S
-                    # - AttributeName: last-name
-                    #   AttributeType: S
-                    # - AttributeName: password-hash
-                    #   AttributeType: S
                 KeySchema:
                     - AttributeName: id
                       KeyType: HASH
+
+            
