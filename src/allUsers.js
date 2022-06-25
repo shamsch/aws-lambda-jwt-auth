@@ -3,7 +3,7 @@ const AWS = require('aws-sdk');
 const allUsers = async (event) => {
     const dynamodb = new AWS.DynamoDB.DocumentClient();
     const params = {
-        TableName: 'UserTable'
+        TableName: 'JwtUsersTable'
     };
     const {Items} = await dynamodb.scan(params).promise();
     const allEmails = Items.map((item) => item.email);
