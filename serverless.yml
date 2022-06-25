@@ -1,0 +1,19 @@
+service: aws-node-rest-api
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: eu-north-1
+  
+
+functions:
+  hello:
+    handler: handler.hello
+    events: 
+      - http:
+          path: /
+          method: get
+
+
