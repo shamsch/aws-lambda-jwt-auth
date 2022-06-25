@@ -1,19 +1,38 @@
 service: aws-node-rest-api
 
-frameworkVersion: '3'
+frameworkVersion: "3"
 
 provider:
-  name: aws
-  runtime: nodejs14.x
-  region: eu-north-1
-  
+    name: aws
+    runtime: nodejs14.x
+    region: eu-north-1
 
 functions:
-  hello:
-    handler: handler.hello
-    events: 
-      - http:
-          path: /
-          method: get
+    hello:
+        handler: handler.hello
+        events:
+            - http:
+                  path: /
+                  method: get
 
-
+resources:
+    Resources:
+        UserTable:
+            Type: AWS::DynamoDB::Table
+            Properties:
+                TableName: UserTable
+                BillingMode: PAY_PER_REQUEST
+                AttributeDefinitions:
+                    - AttributeName: id
+                      AttributeType: S
+                    # - AttributeName: email
+                    #   AttributeType: S
+                    # - AttributeName: first-name
+                    #   AttributeType: S
+                    # - AttributeName: last-name
+                    #   AttributeType: S
+                    # - AttributeName: password-hash
+                    #   AttributeType: S
+                KeySchema:
+                    - AttributeName: id
+                      KeyType: HASH
