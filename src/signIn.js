@@ -29,13 +29,19 @@ const signIn = async (event) => {
     const {Items} = await dynamodb.scan(params).promise();
 
     const allEmails = Items.map((item) => item.email);
-    console.log(allEmails)
+    
 
     // if email is in allEmails
-    const user = allEmails.includes(email) ? Items.find((item) => item.email === email && bcrypt.compare(item.password, password)) : null;
+    const user = allEmails.includes(email) ? Items.find((item) => item.email === email) : null;
 
+
+
+    const passwordMatch = user ? await bcrypt.compare(password, user.passwordHash) : false;
+    
+    // console.log("PASSWORD MATCH",passwordMatch)
+    
     //if user is null, return 400
-    if (!user) {
+    if (!user || !passwordMatch) {
         return {
             statusCode: 400,
             headers: header,
@@ -57,7 +63,7 @@ const signIn = async (event) => {
             statusCode: 200,
             headers: header,
             body: JSON.stringify({
-                token: token, 
+                token: token,
             })
         };
     }
