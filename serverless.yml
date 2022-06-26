@@ -20,12 +20,14 @@ functions:
             - http:
                   path: /signup
                   method: post
+
     allusers:
         handler: src/allUsers.handler
         events:
             - http:
                   path: /allusers
                   method: get
+                
     signin:
         handler: src/signIn.handler
         events:

@@ -5,10 +5,16 @@ const bcrypt = require('bcryptjs');
 
 const signIn = async (event) => {
     const { email, password } = JSON.parse(event.body);
+    const header = {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+    }
+    
     // if email or password is missing, return 400
     if (!email || !password) {
         return {
             statusCode: 400,
+            headers: header,
             body: JSON.stringify({
                 error: 'Email and password are required'
             })
@@ -32,6 +38,7 @@ const signIn = async (event) => {
     if (!user) {
         return {
             statusCode: 400,
+            headers: header,
             body: JSON.stringify({
                 error: 'Invalid email or password'
             })
@@ -48,6 +55,7 @@ const signIn = async (event) => {
         });
         return {
             statusCode: 200,
+            headers: header,
             body: JSON.stringify({
                 token: token, 
             })

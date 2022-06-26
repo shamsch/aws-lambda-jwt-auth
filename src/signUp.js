@@ -5,11 +5,16 @@ const AWS = require('aws-sdk');
 const signUp = async (event) => {
     const dynamodb = new AWS.DynamoDB.DocumentClient();
     let { email, password } = JSON.parse(event.body);
-    
+    const header = {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true,
+    }
+
     // if email or password is missing, return 400
     if (!email || !password) {
         return {
             statusCode: 400,
+            headers: header,
             body: JSON.stringify({
                 error: 'Email and password are required'
             })
@@ -28,6 +33,7 @@ const signUp = async (event) => {
     if (allEmails.includes(email)) {
         return {
             statusCode: 400,
+            headers: header,
             body: JSON.stringify({
                 error: 'Email already exists'
             })
@@ -38,6 +44,7 @@ const signUp = async (event) => {
     if (password.length < 8) {
         return {
             statusCode: 400,
+            headers: header,
             body: JSON.stringify({
                 error: 'Password must be at least 8 characters long'
             })
@@ -47,6 +54,7 @@ const signUp = async (event) => {
     if(!email.includes('@') || !email.includes('.')){
         return {
             statusCode: 400,
+            headers: header,
             body: JSON.stringify({
                 error: 'Email is invalid'
             })
@@ -68,10 +76,12 @@ const signUp = async (event) => {
         await dynamodb.put(params).promise();
         return {
             statusCode: 200,
+            headers: header,
             body: JSON.stringify({
                 id,
                 email
             })
+
         };
       }
 }
